@@ -66,6 +66,17 @@ let doesItemMatchFilters = (~item: Item.t, ~filters: t) => {
     | text =>
       Js.String.toLowerCase(item.name)
       |> Js.String.indexOf(Js.String.toLowerCase(text)) != (-1)
+      || (
+        switch (item.tags) {
+        | Some(tags) =>
+          tags->Belt.Array.getIndexBy(tag =>
+            Js.String.toLowerCase(tag)
+            |> Js.String.includes(Js.String.toLowerCase(text))
+          )
+          !== None
+        | None => false
+        }
+      )
     }
   )
   && (

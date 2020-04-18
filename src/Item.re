@@ -1,5 +1,6 @@
 type recipeItem = (string, int);
 type recipe = array(recipeItem);
+type tags = array(string);
 
 type t = {
   id: string,
@@ -12,6 +13,7 @@ type t = {
   orderable: bool,
   customizable: bool,
   category: string,
+  tags: option(tags),
 };
 
 let categories = [|
@@ -105,6 +107,7 @@ let jsonToItem = (json: Js.Json.t) => {
       (json |> optional(field("customize", bool)))
       ->Belt.Option.getWithDefault(false),
     category: json |> field("category", string),
+    tags: json |> optional(field("tags", array(string))),
   };
 };
 
